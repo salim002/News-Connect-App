@@ -20,41 +20,41 @@ const News = (props) => {
     let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`;
     setLoading(true);
     props.setProgress(30);
-    try {
+    try{
       let data = await fetch(url);
-      if (data.status === 429) {
+      if(data.status === 429) {
         throw new Error('API hit limit exceeded');
       }
       let parsedData = await data.json();
       props.setProgress(70);
       setArticles(parsedData.articles);
       setTotalResults(parsedData.totalResults);
-    } catch (error) {
+    } catch(error){
       setError('API hit limit exceeded, please try after some time');
-    } finally {
+    } finally{
       setLoading(false);
       props.setProgress(100);
     }
   };
 
   useEffect(() => {
-    document.title = `${capitalizeFirstLetter(props.category)} - NewsExpress`;
+    document.title = `${capitalizeFirstLetter(props.category)} - NewsConnect`;
     updateNews();
     // eslint-disable-next-line
   }, []);
 
   const fetchMoreData = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
-    setPage(page + 1);
+    setPage(page+1);
     try {
-      let data = await fetch(url);
-      if (data.status === 429) {
+      let data=await fetch(url);
+      if(data.status===429) {
         throw new Error('API hit limit exceeded');
       }
       let parsedData = await data.json();
       setArticles(articles.concat(parsedData.articles));
       setTotalResults(parsedData.totalResults);
-    } catch (error) {
+    } catch(error){
       setError('API hit limit exceeded, please try after some time');
     }
   };
@@ -62,7 +62,7 @@ const News = (props) => {
   return (
     <>
       <h1 className="text-center" style={{ margin: '80px 0px' }}>
-        NewsExpress - Top {capitalizeFirstLetter(props.category)} Headlines
+        NewsConnect - Top {capitalizeFirstLetter(props.category)} Headlines
       </h1>
       {loading && <Spinner />}
       {error && <div className="text-center text-danger">{error}</div>}
@@ -79,8 +79,8 @@ const News = (props) => {
                 return (
                   <div className="col-md-4" key={element.url}>
                     <NewsItem
-                      title={element.title ? element.title.slice(0, 45) : ''}
-                      description={element.description ? element.description.slice(0, 88) : ''}
+                      title={element.title ? element.title.slice(0, 45) : ""}
+                      description={element.description ? element.description.slice(0, 88) : ""}
                       imageUrl={element.urlToImage}
                       newsUrl={element.url}
                       author={element.author}
