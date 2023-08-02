@@ -14,19 +14,20 @@ const News = (props) => {
 
   const fetchNews = async () => {
     props.setProgress(10);
-    let url = `https://gnews.io/api/v4/search?q=${props.category}&lang=en&country=${props.country}&max=10&apikey=${props.apiKey}`;
+    let url = `https://gnews.io/api/v4/search?q=${props.category}&lang=en&country=${props.country}&max=30&apikey=${props.apiKey}`;
     setLoading(true);
     props.setProgress(30);
     try {
       let data = await fetch(url);
-      if (!data.ok) {
+      if(!data.ok) {
         throw new Error('Failed to fetch data');
       }
       let parsedData = await data.json();
       props.setProgress(70);
+      // console.log(parsedData.articles.length);
       setArticles(parsedData.articles);
     } catch (error) {
-      setError('API hit limit exceeded, please try after some time');
+      setError("Error in fetching News, please try after some time");
     } finally {
       setLoading(false);
       props.setProgress(100);
@@ -36,7 +37,7 @@ const News = (props) => {
   useEffect(() => {
     document.title = `${capitalizeFirstLetter(props.category)} - NewsConnect`;
     fetchNews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   return (
