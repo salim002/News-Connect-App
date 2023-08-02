@@ -16,19 +16,19 @@ const News = (props) => {
     const url = `https://gnews.io/api/v4/search?q=${props.category}&lang=en&country=${props.country}&max=30&apikey=${props.apiKey}`;
     setLoading(true);
     props.setProgress(30);
-    try{
+    try {
       let data = await fetch(url);
-      if(!data.ok) {
+      if (!data.ok) {
         throw new Error('Failed to fetch data');
       }
       let parsedData = await data.json();
       props.setProgress(70);
-      // console.log(parsedData.articles.length);
       setArticles(parsedData.articles);
+      // console.log(articles.length);
       setLoading(false);
       props.setProgress(100);
-    } catch(error){
-      setError("Error in fetching News, please try after some time");
+    } catch (error) {
+      setError('Error in fetching News, please try after some time');
       setLoading(false);
       props.setProgress(100);
     }
@@ -41,33 +41,27 @@ const News = (props) => {
   }, []);
 
   return (
-    <>
-      <h1 className="text-center" style={{ margin: '80px 0px' }}>
-        NewsConnect - Top {capitalizeFirstLetter(props.category)} Headlines
-      </h1>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">NewsConnect - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
       {loading && <Spinner />}
       {error && <div className="text-center text-danger">{error}</div>}
       {!loading && !error && (
-        <div className="container">
-          <div className="row">
-            {articles.map((element) => {
-              return (
-                <div className="col-md-4" key={element.url}>
-                  <NewsItem
-                    title={element.title ? element.title.slice(0, 45) : ''}
-                    description={element.description ? element.description.slice(0, 88) : ''}
-                    imageUrl={element.image}
-                    newsUrl={element.url}
-                    date={element.publishedAt}
-                    source={element.source.name}
-                  />
-                </div>
-              );
-            })}
-          </div>
+        <div className="row row-cols-1 row-cols-md-3 g-4">
+          {articles.map((element) => (
+            <div className="col mb-4" key={element.url}>
+              <NewsItem
+                title={element.title ? element.title.slice(0, 50) : ''}
+                description={element.description ? element.description.slice(0, 120) : ''}
+                imageUrl={element.image}
+                newsUrl={element.url}
+                date={element.publishedAt}
+                source={element.source.name}
+              />
+            </div>
+          ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
